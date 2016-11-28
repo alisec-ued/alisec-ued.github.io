@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://alisec-ued.github.io/"/>
-  <updated>2016-11-28T03:02:51.000Z</updated>
+  <updated>2016-11-28T03:10:32.000Z</updated>
   <id>https://alisec-ued.github.io/</id>
   
   <author>
@@ -20,13 +20,14 @@
     <link href="https://alisec-ued.github.io/2016/11/28/%E5%9B%BE%E8%A7%A3Redux%E6%95%B0%E6%8D%AE%E6%B5%81(%E4%BA%8C)/"/>
     <id>https://alisec-ued.github.io/2016/11/28/图解Redux数据流(二)/</id>
     <published>2016-11-27T17:17:40.000Z</published>
-    <updated>2016-11-28T03:02:51.000Z</updated>
+    <updated>2016-11-28T03:10:32.000Z</updated>
     
     <content type="html"><![CDATA[<p>上一篇文章回答了前两个问题，而这一篇则回答最后一个问题。</p>
 <h2 id="Redux如何使用？"><a href="#Redux如何使用？" class="headerlink" title="Redux如何使用？"></a>Redux如何使用？</h2><p>前一篇文章描述了Redux的基本要素，并且梳理了一下Redux的数据流动图</p>
 <p><img src="https://img.alicdn.com/tps/TB1vRLKOpXXXXacaXXXXXXXXXXX-889-271.png" alt="Alt text"></p>
 <p>首先，我们的View上体现出的任何操作或者事件都会调用Dispatch方法触发Action<br>Action 会告知了type和data<br>然后，Store自动调用Reducer，并且传入两个参数：当前 State和收到的Action。 Reducer会返回新的State 。并且这个过程是纯函数式的，返回的结果由入参决定，不会随着外界的变化而改变。</p>
 <p>知道概念了，那么我们从代码层面如何搭建出Redux数据流的架构呢？</p>
+<a id="more"></a>
 <h3 id="最基本的Redux数据流"><a href="#最基本的Redux数据流" class="headerlink" title="最基本的Redux数据流"></a>最基本的Redux数据流</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> initialState = &#123;</div><div class="line">  	<span class="attr">items</span>: []</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">const</span> reducer = <span class="function">(<span class="params">state = initialState, action = &#123;&#125;</span>) =&gt;</span> &#123;  </div><div class="line"><span class="keyword">const</span> &#123; type &#125; = action;</div><div class="line"><span class="keyword">switch</span> (type) &#123;</div><div class="line">    <span class="keyword">case</span> <span class="string">"ADD_ITEM"</span>:</div><div class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</div><div class="line">        <span class="attr">items</span>: state.items.concat(action.item)</div><div class="line">      &#125;);</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">case</span> <span class="string">"GET_ITEM_LIST"</span>:</div><div class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</div><div class="line">        <span class="attr">items</span>: action.items</div><div class="line">      &#125;);</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> store = createStore(reducer)</div><div class="line"></div><div class="line">store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">console</span>.log(store.getState())</div><div class="line">&#125;)</div><div class="line"></div><div class="line">store.dispatch(&#123;<span class="attr">type</span>: <span class="string">'GET_ITEM_LIST'</span>,<span class="string">'items'</span>:[&#123;<span class="attr">id</span>:<span class="number">1</span>,<span class="attr">name</span>:<span class="string">'test'</span>&#125;]&#125;)</div><div class="line">store.dispatch(&#123;<span class="attr">type</span>: <span class="string">'ADD_ITEM'</span>,<span class="string">'item'</span>:[&#123;<span class="attr">id</span>:<span class="number">2</span>,<span class="attr">name</span>:<span class="string">'test2'</span>&#125;]&#125;)</div><div class="line"></div></pre></td></tr></table></figure>
 <p>这个代码段是最简单的Redux数据流例子，把创建Store、ActionCreator、Reducer全放在了一个文件中，在实际项目中，这当然不可取。<br>其实每个Redux的实体概念都可以拆解成一个单独的文件去管理。<br>在项目中为了项目的规范化，我们可以对所有的action_type常量进行统一的管理，放到单独的文件中</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">const</span> GET_ITEM_LIST = <span class="string">'GET_ITEM_LIST'</span></div><div class="line"><span class="keyword">const</span> ADD_ITEM = <span class="string">'ADD_ITEM'</span></div><div class="line"></div></pre></td></tr></table></figure>
@@ -58,14 +59,18 @@
 <p>我们知道Action正常其实返回的是一个js对象，如果没有经过Middleware的处理，是不符合Redux逻辑，会抛出异常的，<strong>所以redux-thunk只做了一件事件</strong>，<strong>那就是让Action能够兼容 return 函数</strong>，redux-thunk内部再去消化掉这个函数。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">actionCreate</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">dispatch, getState</span>) </span>&#123;</div><div class="line">        api.fetch(data).then(<span class="function"><span class="keyword">function</span> (<span class="params">json</span>) </span>&#123;</div><div class="line">            dispatch(json);</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div></pre></td></tr></table></figure>    
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上是最近一段时间通过在业务不断实践，然后学习和思考的总结。</p>
-<p>在这期间发现，很多东西需要事先去积累，要拓宽自己的视野，如果自己不知道某种设计思路并且没有相关经验时，很难想到点上。<br>技术与业务是相辅相成的，技术能够很好的帮助自己拓宽视野，能设计更好的项目架构；而业务能够让技术得以实践，并且发现技术上可能还存在的问题，从而积累经验。</p>
+<p>在这期间发现，很多东西需要事先去积累，要拓宽自己的视野，如果自己不知道某种设计思路并且没有相关经验时，很难想到点上。</p>
+<p>技术与业务是相辅相成的，技术能够很好的帮助自己拓宽视野，能设计更好的项目架构；而业务能够让技术得以实践，并且发现技术上可能还存在的问题，从而积累经验。</p>
 <p>这个思路我通过这段时间的学习感悟到的，今后的学习也会沿着这个思路走下去。</p>
 ]]></content>
     
     <summary type="html">
     
       &lt;p&gt;上一篇文章回答了前两个问题，而这一篇则回答最后一个问题。&lt;/p&gt;
-&lt;h2 id=&quot;Redux如何使用？&quot;&gt;&lt;a href=&quot;#Redux如何使用？&quot; class=&quot;headerlink&quot; title=&quot;Redux如何使用？&quot;&gt;&lt;/a&gt;Redux如何使用？&lt;/h2&gt;&lt;p&gt;前一
+&lt;h2 id=&quot;Redux如何使用？&quot;&gt;&lt;a href=&quot;#Redux如何使用？&quot; class=&quot;headerlink&quot; title=&quot;Redux如何使用？&quot;&gt;&lt;/a&gt;Redux如何使用？&lt;/h2&gt;&lt;p&gt;前一篇文章描述了Redux的基本要素，并且梳理了一下Redux的数据流动图&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://img.alicdn.com/tps/TB1vRLKOpXXXXacaXXXXXXXXXXX-889-271.png&quot; alt=&quot;Alt text&quot;&gt;&lt;/p&gt;
+&lt;p&gt;首先，我们的View上体现出的任何操作或者事件都会调用Dispatch方法触发Action&lt;br&gt;Action 会告知了type和data&lt;br&gt;然后，Store自动调用Reducer，并且传入两个参数：当前 State和收到的Action。 Reducer会返回新的State 。并且这个过程是纯函数式的，返回的结果由入参决定，不会随着外界的变化而改变。&lt;/p&gt;
+&lt;p&gt;知道概念了，那么我们从代码层面如何搭建出Redux数据流的架构呢？&lt;/p&gt;
     
     </summary>
     
@@ -79,7 +84,7 @@
     <link href="https://alisec-ued.github.io/2016/11/23/%E5%9B%BE%E8%A7%A3Redux%E6%95%B0%E6%8D%AE%E6%B5%81(%E4%B8%80)/"/>
     <id>https://alisec-ued.github.io/2016/11/23/图解Redux数据流(一)/</id>
     <published>2016-11-23T06:37:31.000Z</published>
-    <updated>2016-11-28T03:03:10.000Z</updated>
+    <updated>2016-11-28T03:09:03.000Z</updated>
     
     <content type="html"><![CDATA[<p>这篇文章我只介绍3个问题</p>
 <ol>
@@ -91,6 +96,7 @@
 <p><img src="https://img.alicdn.com/tps/TB1JuYfNVXXXXbmaXXXXXXXXXXX-801-259.jpg" alt="Alt text"></p>
 <p>我想没有接触过的人一看肯定一脸懵逼。<br>那么什么是Redux呢？<br>一句话概括，<strong>redux只是一个实现了Flux思想的数据流框架。</strong><br>既然是一个数据流框架，那么数据是如何流动的？</p>
 <p><img src="https://img.alicdn.com/tps/TB1kYfaNVXXXXcLaXXXXXXXXXXX-604-352.png" alt="Alt text"></p>
+<a id="more"></a>
 <p><strong>所谓 Redux，就是将动作(action) 变换成 state 转换函数(reducer)，然后放到一个统一的地方(store)来 setState 而已。</strong></p>
 <p>我个人理解的Redux，其特性有3个：</p>
 <ol>
@@ -179,7 +185,9 @@
 &lt;li&gt;Redux如何使用？&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;##什么是Redux?&lt;br&gt;你们可以看看官网的解释，&lt;br&gt;但是呢，&lt;/p&gt;
-&lt;p&gt;&lt;img
+&lt;p&gt;&lt;img src=&quot;https://img.alicdn.com/tps/TB1JuYfNVXXXXbmaXXXXXXXXXXX-801-259.jpg&quot; alt=&quot;Alt text&quot;&gt;&lt;/p&gt;
+&lt;p&gt;我想没有接触过的人一看肯定一脸懵逼。&lt;br&gt;那么什么是Redux呢？&lt;br&gt;一句话概括，&lt;strong&gt;redux只是一个实现了Flux思想的数据流框架。&lt;/strong&gt;&lt;br&gt;既然是一个数据流框架，那么数据是如何流动的？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://img.alicdn.com/tps/TB1kYfaNVXXXXcLaXXXXXXXXXXX-604-352.png&quot; alt=&quot;Alt text&quot;&gt;&lt;/p&gt;
     
     </summary>
     
