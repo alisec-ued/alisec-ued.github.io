@@ -1,0 +1,88 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 图解Redux数据流(一) · Hexo</title><meta name="description" content="图解Redux数据流(一) - alisec-ued"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="short icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="https://alisec-ued.github.io/atom.xml" title="Hexo"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/alisec-ued" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><section class="container"><div class="post"><article class="post-block"><h1 class="post-title">图解Redux数据流(一)</h1><div class="post-info">Nov 23, 2016</div><div class="post-content"><p>这篇文章我只介绍3个问题</p>
+<ol>
+<li>什么是Redux？</li>
+<li>为什么是Redux？</li>
+<li>Redux如何使用？</li>
+</ol>
+<p>##什么是Redux?<br>你们可以看看官网的解释，<br>但是呢，</p>
+<p><img src="https://img.alicdn.com/tps/TB1JuYfNVXXXXbmaXXXXXXXXXXX-801-259.jpg" alt="Alt text"></p>
+<p>我想没有接触过的人一看肯定一脸懵逼。<br>那么什么是Redux呢？<br>一句话概括，<strong>redux只是一个实现了Flux思想的数据流框架。</strong><br>既然是一个数据流框架，那么数据是如何流动的？</p>
+<p><img src="https://img.alicdn.com/tps/TB1kYfaNVXXXXcLaXXXXXXXXXXX-604-352.png" alt="Alt text"></p>
+<p><strong>所谓 Redux，就是将动作(action) 变换成 state 转换函数(reducer)，然后放到一个统一的地方(store)来 setState 而已。</strong></p>
+<p>我个人理解的Redux，其特性有3个：</p>
+<ol>
+<li><strong>单向性</strong><ul>
+<li>单向数据流其实并不是redux的特性，而是react本身的思想。这个下面有例子会说明。</li>
+</ul>
+</li>
+<li><strong>唯一性</strong><ul>
+<li>指的是应用的数据都会集中存储在一个地方，这个数据Store就像一个<strong>池子</strong>，任何组件都可以通过固定的管道来传输或者获取这个<strong>池子</strong>里面的数据</li>
+</ul>
+</li>
+<li><strong>时间旅行</strong><ul>
+<li>这个“时间旅行”另外的意思是可预测（predictable），即容易理解的代码。在redux里，<strong>任何一个数据都有状态</strong>。一个用户操作或者程序需要去修改数据，都必须触发Action，这时在redux看来，其实数据是从一个状态，变化成另一个状态。这么一来，数据就变得可预测，可以知道数据的<strong>前置状态(prev state)</strong>和<strong>后置状态(next state)</strong>分别是什么，如果在这里加上单元测试，也是极其容易的一件事情。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://img.alicdn.com/tps/TB1_62kNVXXXXauaXXXXXXXXXXX-2460-166.png" alt="Alt text"></p>
+<p>##为什么是redux<br>曾经有一篇文章叫做<a href="http://www.zcfy.cc/article/you-might-not-need-redux-1334.html" target="_blank" rel="external">《you-might-not-need-redux》</a><br>这篇文章的开头直接揭露了开发者使用redux最为头疼的事情。</p>
+<blockquote>
+<p>为什么因为一个简单的功能，我需要创建三个文件？到底是为什么？</p>
+</blockquote>
+<p>那么我们为什么要使用redux呢？<br>Redux的确限定了开发者如何去编写程序。</p>
+<blockquote>
+<p>Redux提供了一个权衡方案。它规定：</p>
+<pre><code>- 用简单的对象和数组来描述应用状态
+- 用简单的对象来描述应用中的状态变化
+- 用纯函数来描述应用中逻辑变化
+</code></pre></blockquote>
+<p>这意味着你必须遵循一定的规则才可以让你的程序走通。对应的三个文件分别是<strong>Action</strong>，<strong>Reducer</strong>，<strong>Store</strong>，同时也是Redux最重要的3个概念。</p>
+<p>###Action<br>官方的介绍：</p>
+<blockquote>
+<p>Actions are payloads of information that send data from your application to your store. They are the only source of information for the store. You send them to the store using store.dispatch().</p>
+</blockquote>
+<p>翻译成中文：</p>
+<blockquote>
+<p>Actions 是把数据从应用传到 store 的有效载荷。它是 store 数据的唯一来源。用法是通过 store.dispatch() 把 action 传到 store。</p>
+</blockquote>
+<p>还是一脸懵逼？对了，忘了跟你们说了，其实你可以<strong>完全无视</strong>上面的解释。<br>下面我们来玩一个角色扮演的游戏，而我，是导演。哈哈。<br>我们一起来模拟一个战场上情报通讯的场景。</p>
+<blockquote>
+<p>我：咳咳， Action！你过来，你来当<strong>电报员</strong>。如果战场上有消息，立马给我翻译成<strong>电码</strong>发给我，你知道了吗？<br>Action：yes,sir<br><img src="https://img.alicdn.com/tps/TB1gM_CNVXXXXbLXpXXXXXXXXXX-115-123.png" alt="Alt text"></p>
+</blockquote>
+<p>###Dispatch<br>Dispatch其实是Redux中三大主角之一Store的亲儿子，但是作为皇子，老子都上了，儿子能不上吗？</p>
+<blockquote>
+<p>导演：Dispatch！你作为Store的亲儿子，虽然其它能力不行，但至少接电报应该会把。<br>Dispatch：哎，会一点啦会一点<br>我：好，那你给我当<strong>接线员</strong>，给我把Action发给我们的电报转发给Reducer<br> <img src="https://img.alicdn.com/tps/TB14iTtNVXXXXb7XFXXXXXXXXXX-203-176.png" alt="Alt text"></p>
+</blockquote>
+<p>###Reducer</p>
+<blockquote>
+<p>我：Reducer！你作为司令（Store）的亲信，帮他处理电报吧。<br>Reducer：这是我的荣幸。<br>我：那好，我认命你为司令部<strong>秘书长</strong>，根据Dispatch转送的电报报头来规整消息，包括筛选和过滤。<br>Reducer：no problem<br><img src="https://img.alicdn.com/tps/TB1Og2INVXXXXavXpXXXXXXXXXX-87-157.png" alt="Alt text"></p>
+</blockquote>
+<p>###Store</p>
+<blockquote>
+<p>我：尊敬的<strong>司令</strong>先生，我已经为你分配好了所有情报工作人员，您将会根据这些情报制定战略，然后部署下一步行动。<br>Store：嗯，很好。<br><img src="https://img.alicdn.com/tps/TB1f46CNVXXXXX9XFXXXXXXXXXX-241-193.png" alt="Alt text"></p>
+</blockquote>
+<p>好了，角色分配完毕，接下来我们如何上演呢？</p>
+<p><img src="https://img.alicdn.com/tps/TB1NzjHNVXXXXa6XpXXXXXXXXXX-1399-581.png" alt="Alt text"></p>
+<p>相信大家看了上图一(yi)定(lian)知(meng)道(bi)redux数据是如何流动了吧。<br>好了，不扯淡了，我们来看看正版的Redux数据流图是怎么样的吧。</p>
+<p><img src="https://img.alicdn.com/tps/TB1tRDBNVXXXXX9XFXXXXXXXXXX-799-391.png" alt="Alt text"></p>
+<ol>
+<li>View触发dispatch</li>
+<li>进入reducer，修改store中的state</li>
+<li>将新的state和props传入handleChange中，生成更符合页面的props</li>
+<li>传给原始根节点重新render</li>
+</ol>
+<p>有没有觉得还是上面的图比较形象？哈哈<br>好了，回到正题，既然Redux如此复杂，为啥还需要使用Redux？</p>
+<p>我认为Redux的优点：</p>
+<ol>
+<li>Redux把流程规范了，统一渲染根节点虽然对代码管理上规范了一些,只要有需要显示数据的组件，当相关数据更新时都会自动进行更新。</li>
+<li>减少手动编码量，提高编码效率。</li>
+<li>Redux 会更加注重数据的单一流向性，所有的 Component </li>
+</ol>
+<p>都能变的沒有state，还有可以保留Store的历史、回放、修改、以后端进行完全同步等等，同时与后端做<strong>同构</strong>也是相当好的选择。<br>Redux 让程序只拥有一个Listener，不需要在每一个组件中进行自己的state管理，一切所需的数据都从上游作为<strong>props</strong>传进來了。</p>
+<p>Redux的缺点：<br>学习成本比较高，严格的函数式思维比较难以转化，刚开始接触会觉得过程非常繁琐。</p>
+<p>其实就像那篇文章里说的</p>
+<blockquote>
+<p>Redux库 它本身只是一系列的助手将 reducers “挂载”到全局唯一的 store 对象上。你可以根据你的喜好来选择是尽可能少，或尽可能多得使用 Redux。</p>
+</blockquote>
+<p>关于Redux如何使用？请听下回分解。</p>
+</div></article></div></section><footer><div class="paginator"><a href="/2016/11/28/图解Redux数据流(二)/" class="prev">PREV</a></div><div class="copyright"><p>© 2016 <a href="https://alisec-ued.github.io">alisec-ued</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a></p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script></body></html>
