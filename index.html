@@ -5,11 +5,11 @@
 <li>使列表宽度灵活定义，并能根据屏幕大小进行自适应。</li>
 <li>解决不定高度的行，内容垂直居中、水平居中的问题。</li>
 <li>解决响应式的问题（采用媒体查询）。</li>
-</ul></div><a href="/2016/12/02/flex布局/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/11/28/图解Redux数据流(二)/" class="post-title-link">图解Redux数据流(二)</a></h2><div class="post-info">Nov 28, 2016</div><div class="post-content"><p>上一篇文章回答了前两个问题，而这一篇则回答最后一个问题。</p>
+</ul></div><a href="/2016/12/02/flex布局/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/11/28/图解Redux数据流(二)/" class="post-title-link">图解Redux数据流(二)</a></h2><div class="post-info">Nov 28, 2016</div><div class="post-content"><p>上一篇文章回答了前两个问题，而这一篇则回答最后一个问题。</p>
 <h2 id="Redux如何使用？"><a href="#Redux如何使用？" class="headerlink" title="Redux如何使用？"></a>Redux如何使用？</h2><p>前一篇文章描述了Redux的基本要素，并且梳理了一下Redux的数据流动图</p>
 <p><img src="https://img.alicdn.com/tps/TB1vRLKOpXXXXacaXXXXXXXXXXX-889-271.png" alt="Alt text"></p>
 <p>首先，我们的View上体现出的任何操作或者事件都会调用Dispatch方法触发Action<br>Action 会告知了type和data<br>然后，Store自动调用Reducer，并且传入两个参数：当前 State和收到的Action。 Reducer会返回新的State 。并且这个过程是纯函数式的，返回的结果由入参决定，不会随着外界的变化而改变。</p>
-<p>知道概念了，那么我们从代码层面如何搭建出Redux数据流的架构呢？</p></div><a href="/2016/11/28/图解Redux数据流(二)/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/11/23/图解Redux数据流(一)/" class="post-title-link">图解Redux数据流(一)</a></h2><div class="post-info">Nov 23, 2016</div><div class="post-content"><p>这篇文章我只介绍3个问题</p>
+<p>知道概念了，那么我们从代码层面如何搭建出Redux数据流的架构呢？</p></div><a href="/2016/11/28/图解Redux数据流(二)/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/11/23/图解Redux数据流(一)/" class="post-title-link">图解Redux数据流(一)</a></h2><div class="post-info">Nov 23, 2016</div><div class="post-content"><p>这篇文章我只介绍3个问题</p>
 <ol>
 <li>什么是Redux？</li>
 <li>为什么是Redux？</li>
@@ -18,4 +18,4 @@
 <p>##什么是Redux?<br>你们可以看看官网的解释，<br>但是呢，</p>
 <p><img src="https://img.alicdn.com/tps/TB1JuYfNVXXXXbmaXXXXXXXXXXX-801-259.jpg" alt="Alt text"></p>
 <p>我想没有接触过的人一看肯定一脸懵逼。<br>那么什么是Redux呢？<br>一句话概括，<strong>redux只是一个实现了Flux思想的数据流框架。</strong><br>既然是一个数据流框架，那么数据是如何流动的？</p>
-<p><img src="https://img.alicdn.com/tps/TB1kYfaNVXXXXcLaXXXXXXXXXXX-604-352.png" alt="Alt text"></p></div><a href="/2016/11/23/图解Redux数据流(一)/" class="read-more">...阅读全文</a></article></li></ul></section><footer><div class="paginator"></div><div class="copyright"><p>© 2016 <a href="https://alisec-ued.github.io">alisec-ued</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a></p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>var _hmt = _hmt || []; (function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?f356a2d337ba7259fc3c8223ad3deeac";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script></body></html>
+<p><img src="https://img.alicdn.com/tps/TB1kYfaNVXXXXcLaXXXXXXXXXXX-604-352.png" alt="Alt text"></p></div><a href="/2016/11/23/图解Redux数据流(一)/" class="read-more">...more</a></article></li></ul></section><footer><div class="paginator"></div><div class="copyright"><p>© 2016 <a href="https://alisec-ued.github.io">alisec-ued</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a></p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><script>var _hmt = _hmt || []; (function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?f356a2d337ba7259fc3c8223ad3deeac";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script></body></html>
