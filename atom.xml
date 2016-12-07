@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://alisec-ued.github.io/"/>
-  <updated>2016-12-07T07:31:40.000Z</updated>
+  <updated>2016-12-07T07:33:44.000Z</updated>
   <id>https://alisec-ued.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://alisec-ued.github.io/2016/12/07/%E5%89%8D%E5%90%8E%E7%AB%AF%E6%B8%B2%E6%9F%93%E6%A8%A1%E6%9D%BF%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E6%80%9D%E8%80%83/"/>
     <id>https://alisec-ued.github.io/2016/12/07/前后端渲染模板一致性的思考/</id>
     <published>2016-12-07T07:29:28.000Z</published>
-    <updated>2016-12-07T07:31:40.000Z</updated>
+    <updated>2016-12-07T07:33:44.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="一般情况下，前后端合作模式是这样："><a href="#一般情况下，前后端合作模式是这样：" class="headerlink" title="一般情况下，前后端合作模式是这样："></a>一般情况下，前后端合作模式是这样：</h4><ul>
 <li>前端负责把设计稿实现成静态的页面demo，并且把一些资源部署到CDN；</li>
@@ -31,6 +31,7 @@
 <li>一是前端工作量增大</li>
 <li>二是开发约定更为严格。</li>
 </ul>
+<a id="more"></a>
 <p>这两个问题对于前期来说是比较痛苦的，但是随着这种模式的推进，后面会变得越来越容易实现。</p>
 <p>当然你可能会说，前后端分离的项目就不存在这种情况。简单的前后端分离项目，因为<code>view层</code>渲染还是由前端来做，并不会出现这种情况。但对于复杂的前后端分离项目，所有引用资源都是在<code>CDN</code>上的，<code>CDN</code>部署是页面完成时直接部署，此外如果中间层数据量大的话（进而导致工作量大），静态页面也可能不是同一人来写。这样问题又回到了一般的前后端合作模式。</p>
 <p>于是，使用前后端模板渲染保持一致就是一种解决方案了，这里利用<code>webpack</code>来搭建这样的开发模式。</p>
@@ -65,7 +66,14 @@
     <summary type="html">
     
       &lt;h4 id=&quot;一般情况下，前后端合作模式是这样：&quot;&gt;&lt;a href=&quot;#一般情况下，前后端合作模式是这样：&quot; class=&quot;headerlink&quot; title=&quot;一般情况下，前后端合作模式是这样：&quot;&gt;&lt;/a&gt;一般情况下，前后端合作模式是这样：&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;前端负责
+&lt;li&gt;前端负责把设计稿实现成静态的页面demo，并且把一些资源部署到CDN；&lt;/li&gt;
+&lt;li&gt;后端同学将静态demo修改成后端模板（如&lt;code&gt;vm&lt;/code&gt;、&lt;code&gt;xtpl&lt;/code&gt;、&lt;code&gt;jade&lt;/code&gt;、&lt;code&gt;ejs&lt;/code&gt;等）。&lt;br&gt;这里有一个很明显的耦合问题：&lt;br&gt;前后端使用的模板不一致了，导致后期维护成本巨大。由于在模板中可能嵌入了很多业务逻辑，当其他同学来接手项目时，往往容易在不完全理解业务逻辑的情况改出&lt;code&gt;bug&lt;/code&gt;。这个在我接触的项目中有活生生的例子。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;为了提高项目后期可维护性，应该降低这种耦合性，后端同学应该直接使用模板，而不需要通过修改&lt;code&gt;html&lt;/code&gt;文件来创建模板。&lt;/p&gt;
+&lt;h5 id=&quot;当然这样又会有两个问题：&quot;&gt;&lt;a href=&quot;#当然这样又会有两个问题：&quot; class=&quot;headerlink&quot; title=&quot;当然这样又会有两个问题：&quot;&gt;&lt;/a&gt;当然这样又会有两个问题：&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;一是前端工作量增大&lt;/li&gt;
+&lt;li&gt;二是开发约定更为严格。&lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     
